@@ -1,0 +1,230 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "SCF returnreception SVC API",
+    "description": "SCF returnreception SVC API",
+    "contact": {
+      "name": "ISCM"
+    },
+    "license": {
+      "name": "Colruyt Group"
+    },
+    "version": "v1"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8080",
+      "description": "Generated server url"
+    }
+  ],
+  "paths": {
+    "/rest/test/test": {
+      "get": {
+        "tags": [
+          "test-controller"
+        ],
+        "operationId": "processReturnUnitBarcodeScanned",
+        "responses": {
+          "400": {
+            "description": "default response",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReturnReceptionApiError"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "default response"
+          }
+        },
+        "security": [
+          {
+            "oauth2Security": [
+              "returnreceptionsvcv1.unloadtrailer:w"
+            ]
+          }
+        ]
+      }
+    },
+    "/rest/return-unit/scan/human-readable/{humanReadable}": {
+      "get": {
+        "tags": [
+          "return-unit-controller"
+        ],
+        "operationId": "processReturnUnitHumanReadableScanned",
+        "parameters": [
+          {
+            "name": "humanReadable",
+            "in": "path",
+            "description": "The human readable printed on the assetType (cart) itself. This is a default Colruyt NV value, and not the same human readable als per GS1 standard.",
+            "required": true,
+            "schema": {
+              "maxLength": 8,
+              "minLength": 8,
+              "type": "string"
+            },
+            "example": 12345
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "default response",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReturnReceptionApiError"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "default response"
+          }
+        }
+      }
+    },
+    "/rest/return-unit/scan/barcode/{scannedBarcode}": {
+      "get": {
+        "tags": [
+          "return-unit-controller"
+        ],
+        "description": "Receive a return unit by scanning the SSCC of GRAI barcode.",
+        "operationId": "processReturnUnitBarcodeScanned_1",
+        "parameters": [
+          {
+            "name": "scannedBarcode",
+            "in": "path",
+            "description": "String representation of the scanned barcode on the return unit.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "00454001410000352673"
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "UNSUPPORTED_BARCODE"
+          },
+          "201": {
+            "description": "default response"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ReturnReceptionApiError": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "100 CONTINUE",
+              "101 SWITCHING_PROTOCOLS",
+              "102 PROCESSING",
+              "103 CHECKPOINT",
+              "200 OK",
+              "201 CREATED",
+              "202 ACCEPTED",
+              "203 NON_AUTHORITATIVE_INFORMATION",
+              "204 NO_CONTENT",
+              "205 RESET_CONTENT",
+              "206 PARTIAL_CONTENT",
+              "207 MULTI_STATUS",
+              "208 ALREADY_REPORTED",
+              "226 IM_USED",
+              "300 MULTIPLE_CHOICES",
+              "301 MOVED_PERMANENTLY",
+              "302 FOUND",
+              "302 MOVED_TEMPORARILY",
+              "303 SEE_OTHER",
+              "304 NOT_MODIFIED",
+              "305 USE_PROXY",
+              "307 TEMPORARY_REDIRECT",
+              "308 PERMANENT_REDIRECT",
+              "400 BAD_REQUEST",
+              "401 UNAUTHORIZED",
+              "402 PAYMENT_REQUIRED",
+              "403 FORBIDDEN",
+              "404 NOT_FOUND",
+              "405 METHOD_NOT_ALLOWED",
+              "406 NOT_ACCEPTABLE",
+              "407 PROXY_AUTHENTICATION_REQUIRED",
+              "408 REQUEST_TIMEOUT",
+              "409 CONFLICT",
+              "410 GONE",
+              "411 LENGTH_REQUIRED",
+              "412 PRECONDITION_FAILED",
+              "413 PAYLOAD_TOO_LARGE",
+              "413 REQUEST_ENTITY_TOO_LARGE",
+              "414 URI_TOO_LONG",
+              "414 REQUEST_URI_TOO_LONG",
+              "415 UNSUPPORTED_MEDIA_TYPE",
+              "416 REQUESTED_RANGE_NOT_SATISFIABLE",
+              "417 EXPECTATION_FAILED",
+              "418 I_AM_A_TEAPOT",
+              "419 INSUFFICIENT_SPACE_ON_RESOURCE",
+              "420 METHOD_FAILURE",
+              "421 DESTINATION_LOCKED",
+              "422 UNPROCESSABLE_ENTITY",
+              "423 LOCKED",
+              "424 FAILED_DEPENDENCY",
+              "425 TOO_EARLY",
+              "426 UPGRADE_REQUIRED",
+              "428 PRECONDITION_REQUIRED",
+              "429 TOO_MANY_REQUESTS",
+              "431 REQUEST_HEADER_FIELDS_TOO_LARGE",
+              "451 UNAVAILABLE_FOR_LEGAL_REASONS",
+              "500 INTERNAL_SERVER_ERROR",
+              "501 NOT_IMPLEMENTED",
+              "502 BAD_GATEWAY",
+              "503 SERVICE_UNAVAILABLE",
+              "504 GATEWAY_TIMEOUT",
+              "505 HTTP_VERSION_NOT_SUPPORTED",
+              "506 VARIANT_ALSO_NEGOTIATES",
+              "507 INSUFFICIENT_STORAGE",
+              "508 LOOP_DETECTED",
+              "509 BANDWIDTH_LIMIT_EXCEEDED",
+              "510 NOT_EXTENDED",
+              "511 NETWORK_AUTHENTICATION_REQUIRED"
+            ]
+          },
+          "errorCodes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "exceptionMessage": {
+            "type": "string"
+          }
+        },
+        "description": "Error object containing client error information"
+      }
+    },
+    "securitySchemes": {
+      "oauth2Security": {
+        "flows": {
+          "authorizationCode": {
+            "tokenUrl": "https://logon.test.colruytgroup.com/mga/sps/oauth/oauth20/token",
+            "authorizationUrl": "https://logon.test.colruytgroup.com/mga/sps/oauth/oauth20/authorize",
+            "scopes": {
+              "returnreceptionsvcv1.unloadtrailer:w": "Unload trailer.",
+              "returnreceptionsvcv1.empties:w": "Manage empties."
+            }
+          }
+        },
+        "type": "oauth2"
+      },
+      "ApiKeyAuth": {
+        "in": "header",
+        "name": "X-CG-APIKey",
+        "type": "apiKey"
+      }
+    }
+  }
+}
